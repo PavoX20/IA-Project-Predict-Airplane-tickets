@@ -5,8 +5,10 @@ from tensorflow.keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
+import pickle
 if __name__=="__main__":
   def predecir(airline,	source,	destination,	stops,	month,	day,	duration):
+    loaded_model = pickle.load(open("/Users/pavox20/Library/CloudStorage/OneDrive-EscuelaPolitécnicaNacional/Semestres/7mo Semestre/Inteligencia Artifical/Ejercicios Base de datos/Proyecto/SVM.sav", 'rb'))
     modelo=load_model("/Users/pavox20/Library/CloudStorage/OneDrive-EscuelaPolitécnicaNacional/Semestres/7mo Semestre/Inteligencia Artifical/Ejercicios Base de datos/Proyecto/proyecto.h5")
     ticket= {
     'model_name':[airline],
@@ -18,7 +20,7 @@ if __name__=="__main__":
     'has_warranty':[duration]
     
       }
-    dataframe = pd.read_csv('/Users/pavox20/Library/CloudStorage/OneDrive-EscuelaPolitécnicaNacional/Semestres/7mo Semestre/Inteligencia Artifical/Ejercicios Base de datos/Proyecto/Dataframe.csv', sep=",")
+    dataframe = pd.read_csv('/Users/pavox20/Library/CloudStorage/OneDrive-EscuelaPolitécnicaNacional/Semestres/7mo Semestre/Inteligencia Artifical/Ejercicios Base de datos/Proyecto/Dataframe.csv', sep=";")
     
     X= dataframe
     minmaxscaler = MinMaxScaler()
@@ -33,6 +35,7 @@ if __name__=="__main__":
     ticket = minmaxscaler.transform(ticket.values.reshape(-1,7))
 
     
+    print(loaded_model.predict(ticket)[0])
     resultado= modelo.predict(ticket)
         
     return resultado[0][0]
